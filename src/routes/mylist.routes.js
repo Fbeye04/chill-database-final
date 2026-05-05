@@ -4,12 +4,14 @@ import {
   getMyList,
   deleteFromMyList,
 } from "../services/mylist.service.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
-    const { idUser, idSeriesFilm } = req.body;
+    const { idSeriesFilm } = req.body;
+    const idUser = req.user.id_user;
     const letsAdd = await addToMyList(idUser, idSeriesFilm);
 
     res.status(201).json({
@@ -29,9 +31,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/me", verifyToken, async (req, res) => {
   try {
-    const idUser = req.params.id;
+    const idUser = req.user.id_user;
     const yourList = await getMyList(idUser);
 
     res.status(200).json({
@@ -52,10 +54,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// alasan dibalik endpoint hanya kosong karena kebutuhan dua id maka dua id tersebut di proses di kode saja
-router.delete("/", async (req, res) => {
+// terjadi perubahan pembuatan rute delete yang sebelumnya menggunakan req.body namun sekarang user cukup menunjukkan id series film yang nanti digabungkan id user dari verify token. Standar industri tidak membolehkan penggunaan body di delete
+router.delete("/:idSeriesFilm", verifyToken, async (req, res) => {
   try {
-    const { idUser, idSeriesFilm } = req.body;
+    const idSeriesFilm = req.params.idSeriesFilm;
+    const idUser = req.user.id_user;
     const letsDelete = await deleteFromMyList(idUser, idSeriesFilm);
 
     res.status(200).json({

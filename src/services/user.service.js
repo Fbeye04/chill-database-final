@@ -1,5 +1,6 @@
 import db from "../config/db.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 // parameter disini nanti menjadi patokan pemanggilan di rute sehingga req.body harus dibongkar jadi { ..., ..., ...}
 export const registerUser = async (fullname, username, email, password) => {
@@ -30,10 +31,20 @@ export const loginUser = async (username, password) => {
     throw { status: 401, message: "Wrong password, try again!" };
   }
 
+  // pencetakan token setelah username dan password sudah tepat, penambahan id user juga berguna untuk penggunaan di service lain seperti daftar saya
+  const token = jwt.sign(
+    {
+      id_user: rows[0].id_user,
+      username: username,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "1d" },
+  );
+
   // ini adalah kode yang memotong agar saat login berhasil, nantinya password yang sudah di hash tidak muncul di pesan berhasilnya untuk menjaga kerahasiaan
   const { password: passwordDB, ...userWithoutPassword } = rows[0];
 
-  return userWithoutPassword;
+  return { userWithoutPassword, token };
 };
 
 // disini data yang diambil langsung tanpa password sehingga tidak perlu seperti cara di atas namun alasannya karena ...

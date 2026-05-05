@@ -5,6 +5,7 @@ import {
   getUserProfile,
   updateUserProfile,
 } from "../services/user.service.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -56,11 +57,22 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const letsLogin = await loginUser(username, password);
+
+    if (!username || !password) {
+      return res.status(400).json({
+        message: "Username and password must be filled in!",
+      });
+    }
+
+    // sebenarnya bisa tanpa destructuring tapi nanti di status berhasil harus nulis ulang seperti letsLogin.userWithoutPassword dan letsLogin.token jadi tidak efisien
+    const { userWithoutPassword, token } = await loginUser(username, password);
 
     res.status(200).json({
       message: "Login successful",
-      user: letsLogin,
+      data: {
+        user: userWithoutPassword,
+        token: token,
+      },
     });
   } catch (error) {
     if (error.status) {
@@ -76,9 +88,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/profile/:id", async (req, res) => {
+router.get("/profile/me", verifyToken, async (req, res) => {
   try {
-    const idUser = req.params.id;
+    const idUser = req.user.id_user;
     const userProfile = await getUserProfile(idUser);
 
     res.status(200).json({
@@ -99,9 +111,10 @@ router.get("/profile/:id", async (req, res) => {
   }
 });
 
-router.patch("/profile/:id", async (req, res) => {
+// disini walaupun rute edit tapi karena yang diedit adalah data pribadi jadi tidak perlu diambil id dari url karena sudah bisa dibaca dari req.user.id_user yang dibawa dari middleware
+router.patch("/profile/me", verifyToken, async (req, res) => {
   try {
-    const idUser = req.params.id;
+    const idUser = req.user.id_user;
     const newProfile = req.body;
     const letsUpdate = await updateUserProfile(idUser, newProfile);
 

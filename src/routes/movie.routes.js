@@ -6,6 +6,7 @@ import {
   deleteMovie,
   getMovieDetail,
 } from "../services/movie.service.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -25,7 +26,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+// di my list lupa saya tuliskan hal ini: verify token dituliskan di awal karena dia akan difungsikan sebagai penjaga jadi tanpa token, orang tidak mungkin mengakses rute ini
+router.post("/", verifyToken, async (req, res) => {
   try {
     const newMovie = req.body;
     const newId = await addMovie(newMovie);
@@ -42,7 +44,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+// sebelumnya jangan khawatir kenapa endpoint di sini berbeda dengan my list karena ya ini rute movie dan id yang diakses pasti nya movie kecuali kalau ada id lain yang dibutuhkan seperti user barulah id di spesifikkan
+router.patch("/:id", verifyToken, async (req, res) => {
   try {
     const idMovie = req.params.id;
     const newMovie = req.body;
@@ -63,7 +66,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const idMovie = req.params.id;
     const letsDelete = await deleteMovie(idMovie);
@@ -85,8 +88,8 @@ router.delete("/:id", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const idSeriesFilm = req.params.id;
-    const getDetail = await getMovieDetail(idSeriesFilm);
+    const idMovie = req.params.id;
+    const getDetail = await getMovieDetail(idMovie);
 
     res.status(200).json({
       message: "Successfully got the movie details",

@@ -4,10 +4,11 @@ import {
   updateEpisode,
   deleteEpisode,
 } from "../services/episode.service.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     const newEpisode = req.body;
     const newId = await addEpisode(newEpisode);
@@ -30,7 +31,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", verifyToken, async (req, res) => {
   try {
     const idEpisode = req.params.id;
     const newEpisode = req.body;
@@ -54,7 +55,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const idEpisode = req.params.id;
     const letsDelete = await deleteEpisode(idEpisode);
