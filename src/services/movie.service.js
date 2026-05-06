@@ -1,7 +1,40 @@
 import db from "../config/db.js";
 
-export const getAllMovies = async () => {
-  const [rows] = await db.query("SELECT * FROM series_film");
+export const getAllMovies = async (search, tipe, rating, sort) => {
+  let queryText = "SELECT * FROM series_film";
+  // conditions itu adalah array berisi query tambahan yang nanti ditambahkan dibelakang queryText tadi
+  const conditions = [];
+  // values itu yang nilainya yang biasanya ditulis di belakang query seperti ("...", [movieData])
+  const values = [];
+
+  if (search) {
+    conditions.push("judul LIKE ?");
+    /* Intinya kalau % didepan search (%search) dia akan value dari search yang mirip di belakang misal Batman maka (%search adalah nantinya mencari The Batman, lego batman), 
+    kalau (search%) akan mencari (Batman begins, batman the movie), kalau (%search%) akan mencari yang di dua kondisi itu (The batman, Batman begins) */
+    values.push("%" + search + "%");
+  }
+
+  if (tipe) {
+    conditions.push("tipe_tayangan = ?");
+    values.push(tipe);
+  }
+
+  if (rating) {
+    conditions.push("rating_umur = ?");
+    values.push(rating);
+  }
+
+  if (conditions.length > 0) {
+    queryText += " WHERE " + conditions.join(" AND "); // bentuk tulisan query kondisi ini akan seperti ini: "SELECT * FROM series_film WHERE judul LIKE ? AND tipe_tayangan = ?"
+  }
+
+  if (sort === "terbaru") {
+    queryText += " ORDER BY tahun_rilis DESC";
+  } else if (sort === "terlama") {
+    queryText += " ORDER BY tahun_rilis ASC";
+  }
+
+  const [rows] = await db.query(queryText, values); // bentuk tulisan query kondisi ini akan seperti ini: "SELECT * FROM series_film WHERE judul LIKE ? AND tipe_tayangan = ? ORDER BY tahun_rilis DESC"
 
   return rows;
 };

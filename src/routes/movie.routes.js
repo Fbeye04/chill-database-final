@@ -12,7 +12,9 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const movies = await getAllMovies();
+    // req.query itu keranjang kosong yang menampung request dari user dalam hal ini search, tipe, rating, dan sort (namun keempat hal itu bukan bawaan tapi tergantung kebutuhan)
+    const { search, tipe, rating, sort } = req.query;
+    const movies = await getAllMovies(search, tipe, rating, sort); // pengecekan rating nanti + harus diganti 2b karena + dianggap karakter spesial oleh web
 
     res.status(200).json({
       message: "Successfully got all movies",
