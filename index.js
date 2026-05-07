@@ -6,6 +6,7 @@ import movieRoutes from "./src/routes/movie.routes.js";
 import userRoutes from "./src/routes/user.routes.js";
 import mylistRoutes from "./src/routes/mylist.routes.js";
 import episodeRoutes from "./src/routes/episode.routes.js";
+import uploadRoutes from "./src/routes/upload.routes.js";
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -17,6 +18,7 @@ app.use("/api/movies", movieRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/mylist", mylistRoutes);
 app.use("/api/episodes", episodeRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

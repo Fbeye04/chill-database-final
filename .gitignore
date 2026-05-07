@@ -12,3 +12,9 @@ yarn-error.log*
 # OS files
 .DS_store
 Thumbs.db
+
+# Ignore all files in the uploads folder
+uploads/*
+
+# Exception: Keep track of the .gitkeep file to prevent the folder from being lost
+!uploads/.gitkeep

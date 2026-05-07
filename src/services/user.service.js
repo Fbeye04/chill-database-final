@@ -1,6 +1,8 @@
 import db from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import fs from "fs/promises";
+import path from "path";
 
 // parameter disini nanti menjadi patokan pemanggilan di rute sehingga req.body harus dibongkar jadi { ..., ..., ...}
 export const registerUser = async (fullname, username, email, password) => {
@@ -85,6 +87,29 @@ export const updateUserProfile = async (id, newData) => {
     "UPDATE user SET username = ?, email = ?, password = ?, foto_profil = ? WHERE id_user = ?",
     [finalUsername, finalEmail, finalPassword, finalPhoto, id],
   );
+
+  // ini adalah kode tambahan untuk mengganti foto profil agar data yang lama tidak menjadi sampah yang tidak digunakan, hal ini karena ini merupakan proyek movie streaming platform dimana foto profil hanya sebagai hiburan dan bukan utama seperti app medsos jadi daripada memenuhi memori lebih baik dihapus dan diganti tiap ada yang baru
+  // dan ini nantinya tidak perlu dipasang di route karena ini urusan dapur bukan sesuatu yang perlu disajikan ke user
+  if (
+    newData.foto_profil &&
+    oldData.foto_profil &&
+    newData.foto_profil !== oldData.foto_profil
+  ) {
+    try {
+      /* windows itu buta jadi perlu dituliskan alamat lengkap mana file yang mau dihapus,
+      path.join yang akan merangkainya, process.cwd akan membaca dimana folder back-end ini berjalan,
+      lalu dipilih mana folder tempat file itu berada, dan di akhir ditulis mana file yang dituju (oldData.foto_profil) */
+      const oldPhotoPath = path.join(
+        process.cwd(),
+        "uploads/",
+        oldData.foto_profil,
+      );
+      await fs.unlink(oldPhotoPath); // ini adalah perintah penghapusannya
+      console.log(`successful to remove old photo: ${oldData.foto_profil}`);
+    } catch (error) {
+      console.error(`Failed to remove old photo:, ${error.message}`);
+    }
+  }
 
   return { message: "Profile updated successfully" };
 };
