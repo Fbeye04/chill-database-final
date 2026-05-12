@@ -1,117 +1,91 @@
-# 🎬 Chill Streaming API - Core Backend Architecture
+# 🎬 Chill Streaming API - Advanced Backend Architecture
 
-This project is a RESTful API implementation for a movie streaming platform (Chill). The main focus of the development is building a solid Backend architecture using Node.js and MySQL, with an emphasis on Separation of Concerns, data manipulation security, and efficient delivery of nested JSON.
+This project is a RESTful API implementation for a movie streaming platform (Chill). The development focuses on building a solid Backend architecture using Node.js and MySQL, prioritizing Separation of Concerns, dynamic data manipulation, local storage management, and advanced security protocols including JWT authentication and SMTP email verification.
 
 ## 🛠️ Tech Stack
 
-This project is built using a modern Backend ecosystem with the following foundations:
+This project is built using a modern Backend ecosystem:
 
 - **Runtime Environment**: Node.js
-- **Web Framework**: Express.js (Handles routing and HTTP behavior)
-- **Database**: MySQL (Relational Database Management System)
-- **Database Driver**: mysql2 (Implemented using Connection Pool and asynchronous Promise features for performance efficiency).
-- **Security & Utilities**: bcrypt (For one-way password encryption), cors (Allows cross-domain access from the Frontend), and dotenv (Secures secret variables).
+- **Web Framework**: Express.js
+- **Database**: MySQL (using `mysql2` driver with Connection Pool).
+- **Core Security**: `bcrypt` (one-way password encryption), `cors` (Cross-Origin Resource Sharing), and `dotenv` (Environment variable protection).
+- **Authentication**: `jsonwebtoken` (JWT) for stateless identity verification.
+- **File Management**: `multer` for robust local file upload handling.
+- **Communication Protocol**: `nodemailer` functioning as an SMTP client alongside `uuid` (v4) for generating cryptographically secure verification tokens.
 
 ## 📂 Project Structure
 
-This project adheres to the Separation of Concerns (SoC) principle to prevent logic from being concentrated in one place.
+This project enforces the Separation of Concerns (SoC) principle. While currently straightforward, it strictly separates business logic from routing.
 
 ```bash
 chill-backend/
-├── database/ # Stores the blueprint file (.sql) for initial database creation.
-├── postman/ # Stores the Postman Collection (.json) as an API manual.
+├── database/     # Blueprint files (.sql) for database recreation.
+├── postman/      # Postman Collection (.json) as the API interaction manual.
 ├── src/
-│ ├── config/ # Bridge connection to the MySQL database system.
-│ ├── routes/ # Router: Manages URLs and receives/sends JSON.
-│ └── services/ # Service: Contains pure business logic and SQL commands (CRUD).
-├── .env.example # Environment variable framework (Setup guide for other developers).
-├── .gitignore # List of confidential files (including .env) blocked from GitHub.
-├── index.js # The main gateway (Entry point) that starts the server.
-└── package.json # Project identity record and list of Node.js libraries.
+│   ├── config/       # MySQL database connection bridge.
+│   ├── middleware/   # Security gatekeepers (e.g., JWT extraction & validation).
+│   ├── routes/       # URL management and HTTP behavior.
+│   ├── services/     # Pure business logic, DB queries, and external service configurations (Multer/SMTP).
+├── uploads/      # Physical local storage for user-uploaded images.
+├── .env.example  # Setup guide for environment variables.
+├── index.js      # Main Entry Point.
+└── package.json  # Project identity and dependency map.
 ```
 
-## 📅 Development Timeline
+Note: The current architecture utilizes a streamlined Services-Routes pattern. Implementation of dedicated Controllers and Models is designated for future scaling.
 
-Development is carried out in stages, prioritizing fundamental features before moving on to complex data relationships.
+## 📅 Execution Timeline (Mission 1 Advanced)
 
-- **Day 1**: Infrastructure Foundation. Initialize the main libraries (Express, MySQL2, Dotenv) and ensure secure database connections through environment variable configuration.
+Development is structured logically, ensuring security gates are established before complex data manipulation is allowed.
 
-- **Days 2-3**: Core CRUD Movie Entity. Build routes and logic for reading, adding, modifying, and deleting master movie data. Logical rigor is enforced by requiring a WHERE clause on modification operations to prevent a Mass Update disaster that could corrupt the entire database.
+- **Session 1 (May 3): Account Foundation & Encryption.**
+  Modified database schema to include fullname. Rebuilt Register logic ensuring absolute password hashing via bcrypt before database insertion.
+- **Session 2 (May 4): VIP Access & Gatekeeper.**
+  Implemented JWT generation upon successful login. Deployed an Authentication Middleware to intercept and protect private routes, returning 401 Unauthorized for invalid access.
+- **Session 3 (May 7): Core Data Manipulation.**
+  Overhauled the GET /movies route. Engineered a Dynamic SQL Assembly system to handle req.query for Search, Filter, and Sort capabilities simultaneously without syntax collision.
+- **Session 4 (May 9): Local File Expedition.**
+  Implemented multer for image uploads. Configured destination to the local /upload folder with strict file type and size limitations.
+- **Session 5 (May 11): Mail Feature (High Risk).**
+  Engineered account verification via Nodemailer. Integrated UUID v4 generation during registration , SMTP email dispatch , and a validation GET route to ensure system and user data integrity.
 
-- **Days 4-5**: Account System (User Auth). Focus on completing registration, login processes, and user profile management.
+## 🏗️ Architecture and Security Highlights
 
-- **Day 6**: User Interaction (Watchlist). Build the Many-to-Many relationship logic for the "My List" feature, allowing users to save their favorite movies.
+The backend logic is designed to anticipate failure and prevent malicious exploitation:
 
-- **Day 7**: Nested Data (Episode Cycle). Completed the system of cassette discs (episodes) connected to the main film, sealing the completion of the Backend logic for the streaming feature
+- **JWT Authorization Pipeline:** The middleware actively intercepts requests by splitting the Bearer token , verifying it against the secret key , and injecting the payload into req.user. Invalid tokens immediately trigger a rejection.
+- **Dynamic SQL & Injection Prevention:** The search and filter feature does not use static string concatenation. It utilizes a conditions array for SQL clauses and a values array to enforce Prepared Statements , inherently neutralizing SQL Injection attacks.
+- **Defensive File Handling (Callback Trap):** Multer execution in the routes is wrapped inside a callback function. This prevents Multer from throwing raw HTML 500 errors to the client during validation failures (e.g., wrong format).
+- **Storage Efficiency (Silent Failure):** When a user updates their profile picture, the system utilizes fs.unlink to destroy the old physical file (Orphaned Files prevention). This is wrapped in an independent try...catch block so that if file deletion fails, the main database update process remains unaffected.
+- **Atomic Verification & Anti-Information Leakage:** The verification system is built to protect server infrastructure from bot floods.
+  - If the SMTP transporter fails to send the verification email, a DELETE query is triggered to erase the newly registered data, preventing "zombie accounts"
+  - The 403 Forbidden verification check during login is deliberately placed after bcrypt password validation to prevent Information Leakage (stopping attackers from guessing registered emails).
 
-## 🚀 How to Use (Cross-Machine Installation)
-
-Follow the steps below to safely run the server on your local computer:
-
-1. **Repository & Dependency Preparation**
-
-- Download or clone this repository to your local computer.
-- Open a terminal (CMD/Bash) in the project's root folder, then execute this command to download all the required tools:
-
-```bash
-npm install
-```
-
-2. **Database Construction (Warehouse Simulation)**
-
-- Open MySQL Workbench or a similar database management tool.
-- Import and run the .sql file located in the database/ folder.
-- The system will intelligently create the chill_db database and all its table relationships without you having to manually create the schema.
-
-3. **Environment Setup**
-
-- Find a file named .env.example in the root folder.
-- Copy and paste the file and rename it to .env.
-- Open the .env file and fill the DB_PASSWORD variable with your computer's MySQL password. Make sure the DB_PORT value is also correct (usually 3306).
-
-4. **Igniting the Server**
-
-- Back in the terminal, start the server using Node.js with the command:
-
-```bash
-node index.js
-
-Or
-
-run `npm run dev` (if you have Nodemon in development mode).
-```
-
-- If successful, the terminal will print confirmation that the database is connected and the server is running on port 5001.
-
-5. **Testing API Functionality**
-
-- Open the Postman application.
-- Import the `.json` file located in the `postman/` folder.
-- The entire API route collection (from Registration to Watchlist Manipulation) will be immediately available for testing.
-
-## Architecture and Development Logic Highlights
-
-The development of this API wasn't just about creating functional routes; it also focused on the stability and security of the ecosystem.
-
-- **Separation of Responsibilities (SoC)**: The project strictly separates routes (URL traffic handlers and HTTP responses) and services (database query execution chefs and logic validation).
-
-- **Sensitive Data Security**: User passwords are protected using one-way hashing (bcrypt). When retrieving profile data (GET), password data is destroyed before being sent to the frontend to meet industry security standards.
-
-- **"Patchwork" Algorithm for Partial Updates**: The profile edit feature uses the PATCH method, which evaluates old data (oldData) and cross-references it with new user updates to prevent accidentally overwriting columns with NULL values.
-
-- **Complex Relationship Integrity**: In the "My List" feature, because it is a Junction Table, data modifications are bound using a double lock (WHERE id_user = ? AND id_seriesfilm = ?) to prevent duplication and erroneous deletion.
-
-- **Nested JSON Efficiency**: To avoid over-fetching, the episode list is injected directly into the movie detail object using array manipulation. The frontend only needs to make a single API call to assemble the entire page.
-
-## Future Work
+## ⏩ Future Work
 
 To bring this API to a production-ready level, several areas that need to be implemented in the next development cycle are:
-
-- **JWT (JSON Web Token) Authentication System**: Changing the session management system from sending raw IDs to encrypted tokens in headers to prevent identity manipulation (ID spoofing).
 
 - **Subscription Package Management**: Adding a dedicated GET route to serve the package selection page with subscription prices to users.
 
 - **Transaction Gateway (Order & Payment)**: Implementing a POST route to record subscription decisions (checkout) and a GET route for user billing history.
+
+- **Frontend Integration:** Transitioning this API into a fully functional application by integrating it with a frontend framework to create a complete user interface.
+
+## 🚀 How to Use (Cross-Machine Installation)
+
+1. **Repository Preparation:** Clone this repository and run npm install.
+
+2. **Database Construction:** Import the .sql file located in the database/ folder into MySQL to build the schema structure.
+
+3. **Environment Setup:** Copy .env.example to .env.
+   - Configure your MySQL connection.
+   - Set up your JWT_SECRET.
+   - Add your Google App Password (16 digits) for Nodemailer.
+
+4. **Igniting the Server:** Run npm run dev (if using Nodemon) or node index.js.
+
+5. **Testing API Functionality:** Import the Postman Collection (.json) from the postman/ directory to test all endpoints.
 
 ## 👨‍💻 Author
 

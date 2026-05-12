@@ -14,7 +14,7 @@ router.post("/", verifyToken, async (req, res) => {
   uploadProcess(req, res, function (error) {
     if (error instanceof multer.MulterError) {
       return res.status(400).json({
-        message: "Failed to upload (multer error)",
+        message: "Failed to upload (multer error)", // ini error karena
         error: error.message,
       });
     } else if (error) {

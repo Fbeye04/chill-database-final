@@ -3,17 +3,65 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import fs from "fs/promises";
 import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import transporter from "../config/nodemailer.js";
 
 // parameter disini nanti menjadi patokan pemanggilan di rute sehingga req.body harus dibongkar jadi { ..., ..., ...}
 export const registerUser = async (fullname, username, email, password) => {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const verifyAccountToken = uuidv4(); // ini token yang akan dibuat saat user selesai register dan dibawa nodemailer untuk verifikasi akunnya; alternatif bisa gunakan library uuid
 
-  const [result] = await db.query(
-    "INSERT INTO user (fullname, username, email, password) VALUES (?, ?, ?, ?)",
-    [fullname, username, email, hashedPassword],
+  const verificationLink = `http://localhost:5001/api/users/verify-email?token=${verifyAccountToken}`;
+
+  let userId;
+
+  try {
+    const [result] = await db.query(
+      "INSERT INTO user (fullname, username, email, password, verification_token) VALUES (?, ?, ?, ?, ?)",
+      [fullname, username, email, hashedPassword, verifyAccountToken],
+    );
+
+    userId = result.insertId;
+
+    await transporter.sendMail({
+      from: `${process.env.SMTP_EMAIL_USER}`,
+      to: email,
+      subject: "Registration Verification",
+      text: `Halo ${fullname}, silakan verifikasi akun Anda dengan menyalin tautan ini ke browser: ${verificationLink}`,
+      html: `
+      <h3>Hello ${fullname},</h3>
+      <p>Please verify your account by clicking the following link:</P>
+      <a href=${verificationLink} style="padding: 10px 20px; background-color: #e50914; color: white; text-decoration: none; border-radius: 5px;">Verifikasi Akun</a>
+      `,
+    });
+  } catch (error) {
+    await db.query("DELETE FROM user WHERE email = ?", [email]);
+
+    throw new Error(
+      `Registration failed due to email system issues: ${error.message}`,
+    );
+  }
+
+  return userId;
+};
+
+export const verifyEmail = async (token) => {
+  const [rows] = await db.query(
+    "SELECT * FROM user WHERE verification_token = ?",
+    [token],
   );
-  return result.insertId;
+
+  if (rows.length === 0) {
+    throw { status: 404, message: "Invalid Verification Token" };
+  }
+
+  await db.query(
+    "UPDATE user SET is_verified = 1, verification_token = NULL WHERE verification_token = ?",
+    [token],
+  );
+
+  return { message: "Email Verified Successfully" };
 };
 
 export const loginUser = async (username, password) => {
@@ -31,6 +79,14 @@ export const loginUser = async (username, password) => {
 
   if (!isMatch) {
     throw { status: 401, message: "Wrong password, try again!" };
+  }
+
+  if (rows[0].is_verified === 0) {
+    throw {
+      status: 403,
+      message:
+        "Account not verified. Please check your email to verify your account.",
+    };
   }
 
   // pencetakan token setelah username dan password sudah tepat, penambahan id user juga berguna untuk penggunaan di service lain seperti daftar saya

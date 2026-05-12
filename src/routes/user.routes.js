@@ -1,6 +1,7 @@
 import express from "express";
 import {
   registerUser,
+  verifyEmail,
   loginUser,
   getUserProfile,
   updateUserProfile,
@@ -51,6 +52,28 @@ router.post("/register", async (req, res) => {
         error: error.message,
       });
     }
+  }
+});
+
+router.get("/verify-email", async (req, res) => {
+  try {
+    const { token } = req.query;
+    const letsVerify = await verifyEmail(token);
+
+    res.status(200).json({
+      message: letsVerify.message,
+    });
+  } catch (error) {
+    if (error.status) {
+      return res.status(error.status).json({
+        message: error.message,
+      });
+    }
+
+    return res.status(500).json({
+      message: "Failed to verify, something went wrong on the server",
+      error: error.message,
+    });
   }
 });
 

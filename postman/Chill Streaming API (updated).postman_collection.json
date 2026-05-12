@@ -1,178 +1,25 @@
 {
   "info": {
-    "_postman_id": "90dae611-84ab-4d57-b3f7-f84ebf0ee659",
-    "name": "Chill Streaming API",
+    "_postman_id": "df400779-159a-40d2-8b3c-5dbf565c0596",
+    "name": "Chill Streaming API (updated)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "37144456"
   },
   "item": [
     {
-      "name": "Series_film",
+      "name": "Users",
       "item": [
         {
-          "name": "Get All Movies",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
+          "name": "Register User",
           "request": {
             "auth": {
-              "type": "noauth"
-            },
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"judul\": \"Interstellar\",\r\n  \"tahun_rilis\": 2014,\r\n  \"tipe_tayangan\": \"film\",\r\n  \"rating_umur\": \"13+\",\r\n  \"sinopsis\": \"Perjalanan luar angkasa mencari planet baru.\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5001/api/movies",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "5001",
-              "path": [
-                "api",
-                "movies"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Add New Movies",
-          "request": {
-            "auth": {
-              "type": "noauth"
+              "type": "inherit"
             },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"judul\": \"Interstellar\",\r\n  \"tahun_rilis\": 2014,\r\n  \"tipe_tayangan\": \"film\",\r\n  \"rating_umur\": \"13+\",\r\n  \"sinopsis\": \"Perjalanan luar angkasa mencari planet baru.\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5001/api/movies",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "5001",
-              "path": [
-                "api",
-                "movies"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update Movie Data",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"rating_umur\": \"17+\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5001/api/movies/2",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "5001",
-              "path": [
-                "api",
-                "movies",
-                "2"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete Movie",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"rating_umur\": \"SU\",\r\n  \"sinopsis\": \"Perjalanan hidup kakek tua pemarah yang mengubah dirinya\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5001/api/movies/1",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "5001",
-              "path": [
-                "api",
-                "movies",
-                "1"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Movie Details",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:5001/api/movies/2",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "5001",
-              "path": [
-                "api",
-                "movies",
-                "2"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "User",
-      "item": [
-        {
-          "name": "Register user",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"username\": \"zizizi...\",\r\n    \"email\": \"visualjutsu610@gmail.com\",\r\n    \"password\": \"Bangbang\"\r\n}",
+              "raw": "{\r\n    \"fullname\": \"Cecep surecep\",\r\n    \"username\": \"ryu_ryu10\",\r\n    \"email\": \"karasubang@gmail.com\",\r\n    \"password\": \"ahsiap321\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -196,16 +43,16 @@
           "response": []
         },
         {
-          "name": "Login user",
+          "name": "Login User",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
             },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"zizizi...\",\r\n    \"password\": \"Bangbang\"\r\n}",
+              "raw": "{\r\n    \"username\": \"ryu_ryu10\",\r\n    \"password\": \"ahsiap321\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -229,15 +76,15 @@
           "response": []
         },
         {
-          "name": "Get user profile",
+          "name": "Get Profile Detail",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
             },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5001/api/users/profile/1",
+              "raw": "http://localhost:5001/api/users/profile/me",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -247,23 +94,60 @@
                 "api",
                 "users",
                 "profile",
-                "1"
+                "me"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Update user profile",
+          "name": "Upload Photo",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "photo",
+                  "type": "file",
+                  "id": 0,
+                  "fileUploadError": "",
+                  "src": [
+                    "d:\\Download D\\overshirt kemeja.jpeg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5001/api/upload",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5001",
+              "path": [
+                "api",
+                "upload"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "auth": {
+              "type": "inherit"
             },
             "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"zizizi_baru\"\r\n}",
+              "raw": "{\r\n    \"foto_profil\": \"photo-1778493718058-40601802.jpeg\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -271,7 +155,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5001/api/users/profile/1",
+              "raw": "http://localhost:5001/api/users/profile/me",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -281,7 +165,7 @@
                 "api",
                 "users",
                 "profile",
-                "1"
+                "me"
               ]
             }
           },
@@ -290,19 +174,66 @@
       ]
     },
     {
-      "name": "Daftar_saya",
+      "name": "Series_film",
       "item": [
         {
-          "name": "Add to my list",
+          "name": "Get All Movies",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5001/api/movies",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5001",
+              "path": [
+                "api",
+                "movies"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Movie Details",
+          "request": {
+            "auth": {
+              "type": "inherit"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5001/api/movies/16",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5001",
+              "path": [
+                "api",
+                "movies",
+                "16"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add New Movie",
+          "request": {
+            "auth": {
+              "type": "inherit"
             },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"idUser\": 1,\r\n    \"idSeriesFilm\": 2\r\n}",
+              "raw": "{\r\n    \"judul\": \"Bloodhounds\",\r\n    \"tahun_rilis\": 2020,\r\n    \"tipe_tayangan\": \"series\",\r\n    \"rating_umur\": \"17+\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -310,7 +241,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5001/api/mylist",
+              "raw": "http://localhost:5001/api/movies",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -318,22 +249,31 @@
               "port": "5001",
               "path": [
                 "api",
-                "mylist"
+                "movies"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Get my list",
+          "name": "Update Movie",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
             },
-            "method": "GET",
+            "method": "PATCH",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating_umur\": \"21+\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "http://localhost:5001/api/mylist/1",
+              "raw": "http://localhost:5001/api/movies/26",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -341,24 +281,24 @@
               "port": "5001",
               "path": [
                 "api",
-                "mylist",
-                "1"
+                "movies",
+                "26"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Remove movie from my list",
+          "name": "Delete Movie",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
             },
             "method": "DELETE",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"idUser\": 1,\r\n    \"idSeriesFilm\": 2\r\n}",
+              "raw": "{\r\n    \"rating_umur\": \"21+\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -366,7 +306,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5001/api/mylist",
+              "raw": "http://localhost:5001/api/movies/26",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -374,7 +314,8 @@
               "port": "5001",
               "path": [
                 "api",
-                "mylist"
+                "movies",
+                "26"
               ]
             }
           },
@@ -386,16 +327,16 @@
       "name": "Episode_movie",
       "item": [
         {
-          "name": "Add new episode",
+          "name": "Add Episode",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
             },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"id_seriesfilm\": 2,\r\n    \"urutan_episode\": 2,\r\n    \"judul_episode\": \"test 2\",\r\n    \"video_url\": \"https://youtube.com/...\",\r\n    \"durasi_episode\": 20\r\n}",
+              "raw": "{\r\n    \"id_seriesfilm\": 19,\r\n    \"urutan_episode\": 1,\r\n    \"judul_episode\": \"Kemunculan om botak\",\r\n    \"video_url\": \"www.netflix.com/breaking-bad\",\r\n    \"durasi_episode\": 50\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -418,16 +359,16 @@
           "response": []
         },
         {
-          "name": "Update Episode",
+          "name": "Update/edit Episode",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
             },
             "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"judul_episode\": \"Episode test 2\",\r\n}",
+              "raw": "{\r\n    \"judul_episode\": \"Awal mula om botak\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -435,7 +376,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5001/api/episodes/2",
+              "raw": "http://localhost:5001/api/episodes/4",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -444,22 +385,22 @@
               "path": [
                 "api",
                 "episodes",
-                "2"
+                "4"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Delete episode",
+          "name": "Delete Episode",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "inherit"
             },
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:5001/api/episodes/2",
+              "raw": "http://localhost:5001/api/episodes/4",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -468,7 +409,113 @@
               "path": [
                 "api",
                 "episodes",
-                "2"
+                "4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Daftar_saya",
+      "item": [
+        {
+          "name": "Add to My List",
+          "request": {
+            "auth": {
+              "type": "inherit"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"idUser\": 10,\r\n    \"idSeriesFilm\": 19\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5001/api/mylist",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5001",
+              "path": [
+                "api",
+                "mylist"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My List",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "inherit"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"idUser\": 10,\r\n    \"idSeriesFilm\": 19\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5001/api/mylist/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5001",
+              "path": [
+                "api",
+                "mylist",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Movie from My List",
+          "request": {
+            "auth": {
+              "type": "inherit"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5001/api/mylist/19",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5001",
+              "path": [
+                "api",
+                "mylist",
+                "19"
               ]
             }
           },
