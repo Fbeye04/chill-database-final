@@ -142,7 +142,7 @@ export const updateUserProfile = async (id, newData) => {
   await db.query(
     "UPDATE user SET username = ?, email = ?, password = ?, foto_profil = ? WHERE id_user = ?",
     [finalUsername, finalEmail, finalPassword, finalPhoto, id],
-  );
+  ); // perlu dipikirkan apakah perlu pengamanan tambahan saat email disini diganti karena di awal registrasi kan perlu verifikasi email
 
   // ini adalah kode tambahan untuk mengganti foto profil agar data yang lama tidak menjadi sampah yang tidak digunakan, hal ini karena ini merupakan proyek movie streaming platform dimana foto profil hanya sebagai hiburan dan bukan utama seperti app medsos jadi daripada memenuhi memori lebih baik dihapus dan diganti tiap ada yang baru
   // dan ini nantinya tidak perlu dipasang di route karena ini urusan dapur bukan sesuatu yang perlu disajikan ke user
