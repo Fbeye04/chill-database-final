@@ -1,4 +1,5 @@
 import db from "../config/db.js";
+import { normalizeMovieImages } from "./movie.service.js";
 
 export const addToMyList = async (idUser, idSeriesFilm) => {
   // perlu dua id sebagai akibat sebagai tabel penghubung
@@ -37,7 +38,7 @@ export const getMyList = async (idUser) => {
     [idUser],
   );
 
-  return movieRows;
+  return movieRows.map(normalizeMovieImages);
 };
 
 export const deleteFromMyList = async (idUser, idSeriesFilm) => {
