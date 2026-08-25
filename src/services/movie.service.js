@@ -36,7 +36,7 @@ export const getAllMovies = async (search, tipe, rating, sort) => {
 
   const [rows] = await db.query(queryText, values); // bentuk tulisan query kondisi ini akan seperti ini: "SELECT * FROM series_film WHERE judul LIKE ? AND tipe_tayangan = ? ORDER BY tahun_rilis DESC"
 
-  return rows.map(normalizeMovieImages);
+  return rows;
 };
 
 export const addMovie = async (movieData) => {
@@ -95,20 +95,10 @@ export const getMovieDetail = async (id) => {
   );
 
   // mengeluarkan data movie tadi dari array nya sehingga tersisa objek saja
-  const movieData = normalizeMovieImages(masterRows[0]);
+  const movieData = masterRows[0];
   // baru lah disini data episode rows itu digabungkan sebagai bagian dari objek movie data tadi dengan nama episodes
   movieData.episodes = episodeRows;
 
   // makanya disini itu yang dipanggil lagi adalah movie data karena sudah menampung semuanya
   return movieData;
-};
-
-export const normalizeMovieImages = (movie) => {
-  if (!movie) return movie;
-
-  return {
-    ...movie,
-    poster_portrait: movie.poster_portrait?.replace("-portrait.", "."),
-    poster_landscape: movie.poster_landscape?.replace("-landscape.", "."),
-  };
 };
